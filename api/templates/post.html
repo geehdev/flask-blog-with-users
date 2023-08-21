@@ -1,0 +1,93 @@
+{% include "header.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+  <!-- Page Header -->
+  <header class="masthead" style="background-image: url('{{post.img_url}}')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="post-heading">
+            <h1>{{ post.title }}</h1>
+            <h2 class="subheading">{{ post.subtitle }}</h2>
+            <span class="meta">Posted by
+              <a href="#">{{ post.users.name }}</a>
+              on {{ post.custom_creation_data }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Post Content -->
+  <article>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+            {{ post.body | safe }}
+            <div class="clearfix">
+              <div id="interactions">
+                <a id="show-or-hide-comments">
+                  <i class="far fa-comment fa-lg"></i>
+                </a>
+                <span>{{ post.comments | length}} Comments</span>
+                <a style="text-decoration-color: white;" href="{{url_for('like', post_id=post.id)}}">
+                  {% if has_liked %}
+                   <i style="color: red;" class="fa fa-solid fa-heart fa-lg" aria-hidden="true"></i>
+                  {% else %}
+                    <i class="far fa-heart fa-lg" aria-hidden="true"></i>
+                  {% endif %}
+                </a>
+                <span>{{ post.likes | length}} Likes </span>
+              </div>
+
+                {% if get_flashed_messages() %}
+                  <div class="alert alert-primary text-center" role="alert">
+                    {{ get_flashed_messages()[0] }}
+                  </div>
+                {% endif %}
+
+              <div class="col-lg-8 col-md-10 mx-auto comment" id="container-comments">
+                {% if post.comments | length > 0 %}
+                  {% for comment in post.comments %}
+                    <ul class="commentList">
+                        <li>
+                            <div class="commenterImage">
+                              <img src="{{ comment.users.email | gravatar }}"/>
+                            </div>
+                            <div class="commentText">
+                              {{comment.text | safe}}
+                              {% if current_user.get_id() | int == comment.users.id %}
+                                <a id="delete_icon" href="{{url_for('delete_comment', comment_id=comment.id, post_id=post.id) }}">✘</a>
+                              {% endif %}
+                              <p class="date sub-text"> {{ comment.date}} </p>
+                              {% if comment.users.id | int == 1 %}
+                                <span class="date sub-text text-success">Developer</span>
+                              {% else %}
+                                <span class="date sub-text text-secondary">{{ comment.users.name }} </span>
+                              {% endif %}
+                              </div>
+                          </li>
+                    </ul>
+                  {% endfor %}
+                {% endif %}
+              </div>
+              <hr>
+              <button class="btn btn-primary float-left" id="show-or-hide-form">ADD COMMENT</button>
+              {% if post.users.id == current_user.get_id() | int %}
+                <a class="btn btn-primary float-right" href="{{url_for('edit_post', post_id=post.id)}}">EDIT POST</a>
+              {% endif %}
+            </div>
+
+            <!-- Comments Area -->
+            <div id="container-ckeditor">
+              {{ ckeditor.load() }}
+              {{ wtf.quick_form(form, button_map={"submit": "primary"}) }}
+            </div>
+          </div>
+      </div>
+    </div>
+  </article>
+  <hr>
+  
+{% include "footer.html" %}

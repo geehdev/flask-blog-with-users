@@ -1,0 +1,32 @@
+{% include "header.html" %}
+
+  <!-- Page Header -->
+  <header class="masthead" style="background-image: url('static/img/about.png')">
+    {% block title %}
+    <title>About page</title>
+    {% endblock %}
+
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="page-heading">
+            <h1>About Me</h1>
+            <span class="subheading">This is what I do.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+  
+    <!-- Main Content -->
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <p>I started learning to code in 2020, I wanted to make my own Python automations. Over time I gained a lot of experience in relational databases, web development with Flask, Django and I intend to specialize in being a Full Stack Developer.</p>
+        </div>
+      </div>
+    </div>
+    <hr>
+
+{% include "footer.html" %}
