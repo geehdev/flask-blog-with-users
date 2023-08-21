@@ -12,7 +12,7 @@ from functools import wraps
 import os
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.getenv("FLASK_SECRET_KEY")
+app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
 app.jinja_env.globals['current_year'] = date.today().year
 
 ##CONNECT TO DB
