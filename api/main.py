@@ -16,7 +16,7 @@ app.config['SECRET_KEY'] = os.getenv("FLASK_SECRET_KEY")
 app.jinja_env.globals['current_year'] = date.today().year
 
 ##CONNECT TO DB
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("POSTGRES_URL")
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("POSTGRES_URL_WITH_PSYCOPG2")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
