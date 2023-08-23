@@ -1,6 +1,11 @@
 {% import "bootstrap/wtf.html" as wtf %}
 {% include "header.html" %}
 
+{% block title %}
+  <title>{{ post.subtitle }} - GeeHBlog</title>
+{% endblock %}
+
+
   <!-- Page Header -->
   <header class="masthead" style="background-image: url('{{post.img_url}}')">
     <div class="overlay"></div>
@@ -47,7 +52,7 @@
                   </div>
                 {% endif %}
 
-              <div class="col-lg-8 col-md-10 mx-auto comment" id="container-comments">
+              <div class="comment container" id="container-comments">
                 {% if post.comments | length > 0 %}
                   {% for comment in post.comments %}
                     <ul class="commentList">
@@ -57,18 +62,19 @@
                             </div>
                             <div class="commentText">
                               {{comment.text | safe}}
+                              <p style="display: inline;" class="date sub-text"> {{ comment.date_create.isoformat()[0:10] }} </p>
                               {% if current_user.get_id() | int == comment.users.id %}
                                 <a id="delete_icon" href="{{url_for('delete_comment', comment_id=comment.id, post_id=post.id) }}">✘</a>
                               {% endif %}
-                              <p class="date sub-text"> {{ comment.date}} </p>
                               {% if comment.users.id | int == 1 %}
                                 <span class="date sub-text text-success">Developer</span>
                               {% else %}
                                 <span class="date sub-text text-secondary">{{ comment.users.name }} </span>
                               {% endif %}
+
                               </div>
                           </li>
-                    </ul>
+                      </ul>
                   {% endfor %}
                 {% endif %}
               </div>
