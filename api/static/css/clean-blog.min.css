@@ -122,6 +122,10 @@
     color: red;
 }
 
+.alert {
+    margin-top: 1rem;
+}
+
 #xz {
     font-size: smaller;
     width: 40px;
@@ -142,11 +146,7 @@
 #container-comments {
     display: none;
     right: 121px;
-    padding-left: 0px;
-}
-
-#interactions {
-    margin-bottom: 2rem;
+    padding: 1rem 0rem;
 }
 
 #Noah-Raskin-Effect {

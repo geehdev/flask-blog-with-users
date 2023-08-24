@@ -26,6 +26,7 @@ ckeditor = CKEditor(app)
 login_manager = LoginManager(app)
 gravatar = Gravatar(app, default='retro', force_default=False, use_ssl=False, base_url=None)
 
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.filter_by(id = user_id).first()
@@ -57,8 +58,8 @@ class BlogPost(db.Model):
     body = db.Column(db.Text, nullable=False)
     img_url = db.Column(db.String(250), nullable=False)
     
-    comments = db.relationship('Comment', backref='blog_posts', lazy=True)
-    likes = db.relationship('Like', backref='blog_posts', lazy=True)
+    comments = db.relationship('Comment', backref='blog_posts', lazy=True, cascade="all, delete")
+    likes = db.relationship('Like', backref='blog_posts', lazy=True, cascade="all, delete")
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
@@ -168,12 +169,6 @@ def login():
     return render_template("login.html", form=login_form)
 
 
-@app.route('/logout')
-def logout():
-    logout_user()
-    return redirect(url_for('get_all_posts'))
-
-
 @app.route("/post/<int:post_id>", methods=['GET', 'POST'])
 def show_post(post_id):
     requested_post = BlogPost.query.filter_by(id = post_id).first()
@@ -203,29 +198,6 @@ def show_post(post_id):
     return render_template("post.html", post=requested_post, form=comment_form, has_liked=Like.has_liked_post(post_id=post_id))
 
 
-@app.route('/add_like/<int:post_id>')
-def like(post_id):
-    if current_user.is_authenticated:
-        likes = Like.query.filter_by(post_id=post_id, user_id=int(current_user.get_id())).first()
-
-        if likes:
-            db.session.delete(likes)
-            db.session.commit()
-        else:
-            add_like = Like(
-                like = 1,
-                user_id = current_user.get_id(),
-                post_id = post_id,
-                date_create = date.today()
-                ) 
-            db.session.add(add_like)
-            db.session.commit()
-    else:
-        flash(message="you need to log in to like!")
-    
-    return redirect(url_for('show_post', post_id=post_id))
-
-
 @app.route("/new-post", methods=['GET', 'POST'])
 @login_required
 def add_new_post():
@@ -245,8 +217,7 @@ def add_new_post():
         db.session.commit()
         
         return redirect(url_for("get_all_posts"))
-    
-    return render_template("make-post.html", is_edit=False ,form=form)
+    return render_template("make-post.html", is_edit=False, form=form)
 
 
 @app.route("/edit-post/<int:post_id>", methods=['GET', 'POST'])
@@ -273,6 +244,29 @@ def edit_post(post_id):
     return render_template("make-post.html", form=edit_form, is_edit=True)
 
 
+@app.route('/add_like/<int:post_id>')
+def like(post_id):
+    if current_user.is_authenticated:
+        likes = Like.query.filter_by(post_id=post_id, user_id=int(current_user.get_id())).first()
+
+        if likes:
+            db.session.delete(likes)
+            db.session.commit()
+        else:
+            add_like = Like(
+                like = 1,
+                user_id = current_user.get_id(),
+                post_id = post_id,
+                date_create = date.today()
+                ) 
+            db.session.add(add_like)
+            db.session.commit()
+    else:
+        flash(message="you need to log in to like!")
+    
+    return redirect(url_for('show_post', post_id=post_id))
+
+
 @app.route("/delete/<int:post_id>")
 @login_required
 def delete_post(post_id):
@@ -293,6 +287,12 @@ def delete_comment(comment_id, post_id):
     db.session.commit()
 
     return redirect(url_for('show_post', post_id=post_id))
+
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('get_all_posts'))
 
 
 @app.route("/about")
