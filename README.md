@@ -1,17 +1,17 @@
 # About the project
-I took the base project from my teacher Angela Yu and implemented new features, 
+_I took the base project from my teacher Angela Yu and implemented new features, 
 a little javascript was added to show/hide some elements on the front-end, an animated button, 
 an option for the user to interact in a publication,
-several other small details were added for me, check it out better by clicking on [GeehBlog](https://geehblog.vercel.app/).
+several other small details were added for me, check it out better by clicking on [GeehBlog](https://geehblog-genilsonbick.vercel.app/)._
 
-Visit the [GeehBlog](https://geehblog.vercel.app/) and contribute by leaving your feedback! 🥰
+_Visit the [GeehBlog](https://geehblog-genilsonbick.vercel.app/) and contribute by leaving your feedback!_ 🥰
 
 ## Framework and Database
-- Flask
-- Bootstrap
-- Hash encryption
-- ORM SQLAlchemy
-- PostgreSQL
+- _Flask_
+- _Bootstrap_
+- _Hash encryption_
+- _ORM SQLAlchemy_
+- _PostgreSQL_
 
 ### Presentation
 *Home Page*
